@@ -17,8 +17,7 @@ public class OrderUI extends JFrame {
     Order currentTableOrder = new TableOrder();
 
     int SelectedTable = -1;
-
-
+    boolean[] isFree = new boolean[33];
     OrderUI(){
         super("orderUI");
 
@@ -28,6 +27,8 @@ public class OrderUI extends JFrame {
 
         JTextArea currentOrderText = new JTextArea("Order: ");
         currentOrderText.setEditable(false);
+
+        JFrame frame = new JFrame("Main Window");
 
         JTextArea allOrdersText = new JTextArea("Orders: ");
         allOrdersText.setEditable(false);
@@ -141,14 +142,20 @@ public class OrderUI extends JFrame {
                     if(SelectedTable == -1) return;
                     tableOrderManager.add(currentTableOrder, SelectedTable);
 
-                    String currentOrder = "\nOrder: ";
-                    for(MenuItem item : currentTableOrder.getItems()){
-                        currentOrder += item  + "\n";
+                    if (isFree[SelectedTable] == true){
+                        JOptionPane.showMessageDialog(frame, "Table " + SelectedTable + " not free" );
                     }
-                    currentOrder += "( " + SelectedTable + " )" +  "\n";
-                    allOrdersText.append(currentOrder);
-                    currentTableOrder = new TableOrder();
-                    SelectedTable = -1;
+                    else {
+                        String currentOrder = "\nOrder: ";
+                        for (MenuItem item : currentTableOrder.getItems()) {
+                            currentOrder += item + "\n";
+                        }
+                        currentOrder += "( " + SelectedTable + " )" + "\n";
+                        allOrdersText.append(currentOrder);
+                        isFree[SelectedTable] = true;
+                        currentTableOrder = new TableOrder();
+                        SelectedTable = -1;
+                    }
                 }
                 else{
                     internetTableManager.add(currentInternetOrder, new Customer("Stas", "Sidorov", 22, new Address("Moscow", 600009, "Mira", 24, 36)));
